@@ -1,0 +1,94 @@
+
+#端口配置
+server:
+  port: 8082
+  servlet:
+    context-path: /study
+# 数据库配置
+spring:
+  datasourceread:
+    #url: jdbc:mysql://139.199.209.216:3306/daoshan_school?useSSL=false&&serverTimezone=GMT%2B8&&allowMultiQueries=true&&Unicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/daoshan_school?useSSL=false&&serverTimezone=GMT%2B8&&allowMultiQueries=true
+    username: root
+    password: zhutong960607
+  datasourcewrite:
+    url: jdbc:mysql://localhost:3306/daoshan_school?useSSL=false&&serverTimezone=GMT%2B8&&allowMultiQueries=true
+    username: root
+    password: zhutong960607
+    #数据库配置
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    #这里飘黄是因为spring boot 没有内置druid连接池的以下配置信息，所以需要自己去写一个druid的配置类  来进行这些属性的配置
+    initialSize: 1
+    filters: stat
+    maxActive: 20
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    estOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+  mybatis:
+    configuration:
+      cacheEnabled: true
+      lazyLoadingEnabled: true
+      aggressiveLazyLoading: true
+      multipleResultSetsEnabled: true
+      useColumnLabel: true
+      useGeneratedKeys: false
+      autoMappingBehavior: PARTIAL
+      defaultExecutorType: REUSE
+      mapUnderscoreToCamelCase: true
+      localCacheScope: SESSION
+      jdbcTypeForNull: NULL
+    #jsp 支持
+  mvc:
+    view:
+      prefix: /jsp/
+      suffix: .jsp
+    #关闭默认模板引擎
+  thymeleaf:
+    cache: false
+    enabled: false
+  #mq配置
+  activemq:
+    broker-url: tcp://localhost:61616
+    in-memory: true
+    pool:
+      enabled: false
+#解决关于监控401报错   敏感权限问题
+management:
+  security:
+    enabled: false
+logging:
+  config: classpath:logback-dev.xml
+  level:
+      root: DEBUG
+#mybatis-plus:
+#  type-aliases-package: com.daoshan.bean
+#  mapper-locations: classpath:mapper/*Mapper.xml
+ # global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    #id-type: 3
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+#    field-strategy: 2
+    #驼峰下划线转换
+ #   db-column-underline: true
+    #刷新mapper 调试神器
+    #refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+mapper:
+  #mappers: com.example.myMapper.MyMapper
+  identity: MYSQL
+  not-empty: false
+
+custom:
+  accessKeyId : LTAI1iGvvp1WkvAu
+  accessKeySecret : vxT037TPAnftcwv1CUyeTYZXA5BH4u
+mybatis:
+  mapper-locations: mybatis/*Mapper.xml

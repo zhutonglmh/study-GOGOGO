@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zt.study.dao.ReactUserMapper">
+
+  <resultMap id="BaseResultMap" type="com.zt.study.pojo.ReactUser">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="iphone" jdbcType="VARCHAR" property="iphone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap2" type="com.zt.study.pojo.ReactUser">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="iphone" jdbcType="VARCHAR" property="iphone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <collection property="reactUserDetails" ofType="com.zt.study.pojo.ReactUserDetail">
+      <id property="id" column="uid"/>
+      <result property="length" column="length"/>
+      <result property="pId" column="pid"/>
+      <result column="uname" jdbcType="VARCHAR" property="name" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    a.id, a.name,a.age,a.sex,a.iphone,a.address,a.email,a.create_time,b.id as uid,b.name as uname,b.length,b.pid
+  </sql>
+  <select id="findUser" resultMap="BaseResultMap" parameterType="com.zt.study.pojo.ReactUser">
+    SELECT  <include refid="Base_Column_List" />
+    from react_user a LEFT join react_user_detail b on a.id=b.pid
+    <where>
+      <if test="id !=null and id != ''">
+          and id = #{id,jdbcType=CHAR}
+      </if>
+      <if test="name !=null and name != ''">
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="age !=null and age != ''">
+        and age = #{age,jdbcType=INTEGER}
+      </if>
+      <if test="sex !=null and sex != ''">
+        and sex = #{sex,jdbcType=VARCHAR}
+      </if>
+      <if test="iphone != null and iphone != ''">
+        and iphone = #{iphone,jdbcType=VARCHAR}
+      </if>
+      <if test="address != null and address != ''">
+        and address = #{address,jdbcType=VARCHAR}
+      </if>
+      <if test="email != null and email != ''">
+        and email = #{email,jdbcType=VARCHAR}
+      </if>
+    </where>
+    ORDER BY create_time DESC
+  </select>
+
+  <select id="search" resultMap="BaseResultMap" parameterType="com.zt.study.pojo.ReactUser">
+    SELECT  <include refid="Base_Column_List" />
+    from react_user a
+    <where>
+      <if test="name !=null and name != ''">
+         (a.name like concat('%','${name}','%') or a.age like concat('%','${name}','%') or a.sex like concat('%','${name}','%') or a.email like concat('%','${name}','%') or a.iphone like concat('%','${name}','%'))
+      </if>
+    </where>
+    ORDER BY create_time DESC
+  </select>
+
+  <insert id="addUser" parameterType="com.zt.study.pojo.ReactUser">
+    INSERT INTO react_user (
+       id,name,age,sex,iphone,address,email,create_time
+    )
+    VALUES (
+      #{id,jdbcType=CHAR},
+      #{name,jdbcType=VARCHAR},
+      #{age,jdbcType=INTEGER},
+      #{sex,jdbcType=VARCHAR},
+      #{iphone,jdbcType=VARCHAR},
+      #{address,jdbcType=VARCHAR},
+      #{email,jdbcType=VARCHAR},
+     #{createTime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+  <update id="updateUser" parameterType="com.zt.study.pojo.ReactUser">
+    UPDATE react_user r
+    <set>
+      <if test="name != null and '' != name">
+       r.name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null and '' != age">
+        r.age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null and '' != sex">
+        r.sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="iphone != null and '' != iphone">
+        r.iphone = #{iphone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null and '' != address">
+        r.address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null and '' != email">
+        r.email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null and '' != createTime">
+        r.create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE
+    r.id = #{id,jdbcType=CHAR}
+  </update>
+  <delete id="deleteUser" parameterType="com.zt.study.pojo.ReactUser">
+    delete from react_user
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+</mapper>
